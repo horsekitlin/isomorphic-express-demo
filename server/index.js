@@ -1,4 +1,8 @@
 import http from 'http';
+import path from 'path';
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import Main from '../app/Hello.jsx';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -9,8 +13,9 @@ import multipartMiddleware from 'connect-multiparty';
 let app = express();
 // html template engine
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');
-app.set('datapath', __dirname + "/assets/");
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 3rd party middleware
 app.use(cors({
@@ -30,9 +35,11 @@ app.use(bodyParser.json({
 app.use(multipartMiddleware());
 app.use(logger('dev'));
 
-app.get('/', (req, res) => {
-    console.log(1111);
-    res.render('layout');
+app.use('/*', (req, res) => {
+    const html = ReactDOMServer.renderToString(<Main />);
+    res.render('layout', {
+        reactOutput : html
+    });
 })
 
 /**
