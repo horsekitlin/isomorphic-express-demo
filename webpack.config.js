@@ -17,16 +17,48 @@ export default {
             query: {
                 presets: ['react', 'es2015']
             }
+        },
+        {
+            test: /\.less$/,
+            loader: "style-loader!css-loader!less-loader"
+        },
+        {
+            test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&minetype=application/font-woff"
+        },
+        {
+            test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&minetype=application/font-woff"
+        },
+        {
+            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&minetype=application/octet-stream"
+        },
+        {
+            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "file"
+        },
+        {
+            test: /\.gif$/,
+            loader: "url-loader?mimetype=image/png"
+        },
+        {
+            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+            loader: "url?limit=10000&minetype=image/svg+xml"
         }
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+        _ : 'lodash',
+        React : 'react'
+    }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false,
         screw_ie8: true
       }
-    })
+    }),
   ],
 };
